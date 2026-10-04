@@ -67,3 +67,12 @@ db/*.sqlite-journal
 # Misc local artifacts
 download/
 tests/
+
+# Sandbox-internal scaffolding (not part of the YellowPDF app)
+tool-results/
+.zscripts/
+examples/
+mini-services/
+upload/
+.z-ai-config
+tsconfig.tsbuildinfo
