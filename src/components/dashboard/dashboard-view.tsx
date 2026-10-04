@@ -6,6 +6,7 @@ import {
   TOOLS,
   getToolsByCategory,
   type Tool,
+  type ToolId,
 } from "@/lib/tools";
 import { useAppStore } from "@/lib/store";
 import { Hero } from "./hero";
@@ -20,7 +21,7 @@ import { Button } from "@/components/ui/button";
 const START_WITH_TOOLS: Tool[] = (() => {
   const popular = TOOLS.filter((t) => t.badge === "popular").slice(0, 4);
   if (popular.length >= 4) return popular;
-  const preferredIds = [
+  const preferredIds: ToolId[] = [
     "edit-pdf",
     "sign-pdf",
     "merge-pdf",
