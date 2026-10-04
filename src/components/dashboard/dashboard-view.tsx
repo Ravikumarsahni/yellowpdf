@@ -10,6 +10,7 @@ import {
 import { useAppStore } from "@/lib/store";
 import { Hero } from "./hero";
 import { ToolCard } from "./tool-card";
+import { UsageWidget } from "./usage-widget";
 import { Sparkles, ArrowRight, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -99,6 +100,13 @@ export function DashboardView() {
                 <ToolCard key={t.id} tool={t} />
               ))}
             </div>
+          </section>
+        )}
+
+        {/* Live usage analytics — proves the "100k+ users" scalability story */}
+        {!activeCategoryId && (
+          <section className="mb-12">
+            <UsageWidget />
           </section>
         )}
 

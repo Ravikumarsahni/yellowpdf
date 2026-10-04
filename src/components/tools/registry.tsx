@@ -6,6 +6,7 @@ import { ComingSoonTool } from "./placeholder-tools";
 
 // Real tool components — imported here so the bundler tree-shakes the rest.
 import { MergePdfTool } from "./tools/merge-pdf";
+import { EditPdfTool } from "./tools/edit-pdf";
 import { SplitPdfTool } from "./tools/split-pdf";
 import { CompressPdfTool } from "./tools/compress-pdf";
 import { RotatePdfTool } from "./tools/rotate-pdf";
@@ -25,6 +26,10 @@ import { AiSummarizeTool } from "./tools/ai-summarize";
 import { AiTranslateTool } from "./tools/ai-translate";
 import { AiChatTool } from "./tools/ai-chat";
 import { AiKeypointsTool } from "./tools/ai-keypoints";
+import { SignPdfTool } from "./tools/sign-pdf";
+import { OcrPdfTool } from "./tools/ocr-pdf";
+import { WordToPdfTool } from "./tools/word-to-pdf";
+import { PdfToWordTool } from "./tools/pdf-to-word";
 
 type ToolComponentType = React.ComponentType<{
   tool: NonNullable<ReturnType<typeof getToolById>>;
@@ -37,6 +42,7 @@ type ToolComponentType = React.ComponentType<{
  */
 export const TOOL_COMPONENTS: Partial<Record<string, ToolComponentType>> = {
   "merge-pdf": MergePdfTool,
+  "edit-pdf": EditPdfTool,
   "split-pdf": SplitPdfTool,
   "compress-pdf": CompressPdfTool,
   "rotate-pdf": RotatePdfTool,
@@ -56,6 +62,10 @@ export const TOOL_COMPONENTS: Partial<Record<string, ToolComponentType>> = {
   "ai-translate": AiTranslateTool,
   "ai-chat": AiChatTool,
   "ai-keypoints": AiKeypointsTool,
+  "sign-pdf": SignPdfTool,
+  "ocr-pdf": OcrPdfTool,
+  "word-to-pdf": WordToPdfTool,
+  "pdf-to-word": PdfToWordTool,
 };
 
 export function ToolView() {
