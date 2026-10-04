@@ -210,14 +210,14 @@ export function Sidebar() {
             label="Technical Blog"
             active={view === "blog"}
             collapsed={collapsed}
-            onClick={() => openTool("blog")}
+            onClick={() => setView("blog")}
           />
           <SidebarItem
             icon={<Info className="h-4 w-4" />}
             label="About YellowPDF"
             active={view === "about"}
             collapsed={collapsed}
-            onClick={() => openTool("about")}
+            onClick={() => setView("about")}
           />
         </nav>
       </ScrollArea>

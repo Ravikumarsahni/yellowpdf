@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Heart, Send, Star } from "lucide-react";
+import { Heart, Send, Star, Mail, Briefcase, Bug } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+
+/** Central contact email for business inquiries and issue reports. */
+const CONTACT_EMAIL = "ravi997358@gmail.com";
 
 export function FeedbackView() {
   const setView = useAppStore((s) => s.setView);
@@ -176,6 +179,56 @@ export function FeedbackView() {
           <Heart className="h-4 w-4 mr-1.5 fill-current" />
           Donate $5
         </Button>
+      </div>
+
+      {/* Prefer email? Direct contact for business + issues */}
+      <div className="mt-6 rounded-2xl border border-border bg-card p-5 md:p-6 shadow-sm">
+        <div className="flex items-center gap-2 mb-3">
+          <Mail className="h-5 w-5 text-primary" />
+          <h2 className="text-base font-bold">Prefer email? Reach us directly</h2>
+        </div>
+        <p className="text-sm text-muted-foreground mb-4">
+          For business inquiries, sponsorships, enterprise licensing, or to
+          report a bug / request a feature, email us and we&apos;ll get back to
+          you within 1-2 business days.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <a
+            href={`mailto:${CONTACT_EMAIL}?subject=Business%20inquiry%20-%20YellowPDF`}
+            className="flex items-start gap-3 rounded-xl border border-border p-3 hover:border-primary hover:bg-accent/40 transition-colors"
+          >
+            <div className="grid place-items-center h-8 w-8 rounded-lg bg-primary/10 text-primary shrink-0">
+              <Briefcase className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold">Business inquiries</p>
+              <p className="text-xs text-muted-foreground">
+                Sponsorships, partnerships, enterprise
+              </p>
+            </div>
+          </a>
+          <a
+            href={`mailto:${CONTACT_EMAIL}?subject=Issue%20report%20-%20YellowPDF`}
+            className="flex items-start gap-3 rounded-xl border border-border p-3 hover:border-primary hover:bg-accent/40 transition-colors"
+          >
+            <div className="grid place-items-center h-8 w-8 rounded-lg bg-destructive/10 text-destructive shrink-0">
+              <Bug className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold">Report an issue</p>
+              <p className="text-xs text-muted-foreground">
+                Bug reports, feature requests, support
+              </p>
+            </div>
+          </a>
+        </div>
+        <a
+          href={`mailto:${CONTACT_EMAIL}`}
+          className="mt-4 inline-flex items-center gap-1.5 text-sm text-primary font-medium hover:underline break-all"
+        >
+          <Mail className="h-4 w-4" />
+          {CONTACT_EMAIL}
+        </a>
       </div>
     </div>
   );

@@ -1,8 +1,11 @@
 "use client";
 
-import { BookOpen, ArrowLeft, Clock, Tag } from "lucide-react";
+import { BookOpen, ArrowLeft, Clock, Tag, Briefcase, Bug, Mail } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
+
+/** Central contact email for business inquiries and issue reports. */
+const CONTACT_EMAIL = "ravi997358@gmail.com";
 
 const POSTS = [
   {
@@ -192,6 +195,58 @@ export function AboutView() {
           <li>z-ai-web-dev-sdk for the AI tools backend</li>
           <li>Prisma + SQLite for usage metrics and feedback</li>
         </ul>
+      </Section>
+
+      {/* Business & issues contact */}
+      <Section title="Business & issues">
+        <p>
+          For partnerships, sponsorships, enterprise licensing, or to report a
+          bug / request a feature, reach us directly:
+        </p>
+        <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <a
+            href={`mailto:${CONTACT_EMAIL}?subject=Business%20inquiry%20-%20YellowPDF`}
+            className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary hover:bg-accent/40 transition-colors"
+          >
+            <div className="grid place-items-center h-9 w-9 rounded-lg bg-primary/10 text-primary shrink-0">
+              <Briefcase className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-foreground">
+                Business inquiries
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Sponsorships, partnerships, enterprise
+              </p>
+              <p className="text-sm text-primary font-medium mt-1 break-all">
+                {CONTACT_EMAIL}
+              </p>
+            </div>
+          </a>
+          <a
+            href={`mailto:${CONTACT_EMAIL}?subject=Issue%20report%20-%20YellowPDF`}
+            className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary hover:bg-accent/40 transition-colors"
+          >
+            <div className="grid place-items-center h-9 w-9 rounded-lg bg-destructive/10 text-destructive shrink-0">
+              <Bug className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-semibold text-foreground">
+                Report an issue
+              </p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Bug reports, feature requests, support
+              </p>
+              <p className="text-sm text-primary font-medium mt-1 break-all">
+                {CONTACT_EMAIL}
+              </p>
+            </div>
+          </a>
+        </div>
+        <p className="text-xs text-muted-foreground mt-3 inline-flex items-center gap-1.5">
+          <Mail className="h-3.5 w-3.5" />
+          Or use the in-app <button onClick={() => setView("feedback")} className="text-primary hover:underline">Feedback form</button> for quick structured reports.
+        </p>
       </Section>
 
       {/* Sponsor / donate */}

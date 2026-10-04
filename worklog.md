@@ -562,3 +562,39 @@ Stage Summary:
 - The Edit PDF tool now feels like a real document editor: the user sees the actual rendered PDF page, can drag a rectangle to white-out existing text, and can click to place new text in any of 4 standard PDF fonts (Helvetica / Helvetica Bold / Times Roman / Courier), any size 8–72pt, any color (default black `#000000` so it reads like real text, not a yellow annotation). Pending ops show as live overlays on top of the canvas. Save applies them via pdf-lib (`drawRectangle` for erase, `drawText` per line for text) and produces a download-ready PDF.
 - Coordinate math is correct per spec: canvas-px → PDF-points via `(canvasH - bottom) / s` for the bottom-left Y of erase rectangles (flipping the Y axis), and `(canvasH - cy) / s - size * 0.75` for text baseline (so the text appears above the click point with cap-height ≈ 0.75 of size).
 - All quality gates green: lint 0/0, tsc 0 in my file, curl 200, agent-browser smoke test passes with no console errors.
+
+---
+Task ID: 11-contact-email
+Agent: Main (Z.ai Code) — orchestrator
+Task: Add contact email ravi997358@gmail.com for business inquiries and issue reporting across footer, About page, and Feedback page; also fix a pre-existing sidebar nav bug
+
+Work Log:
+- User requested: add the gmail ID `ravi997358@gmail.com` for business inquiries and issue/bug reporting.
+- Read footer.tsx, blog-about-views.tsx (AboutView), feedback-view.tsx, and sidebar.tsx to find the right insertion points.
+- Added a `CONTACT_EMAIL = "ravi997358@gmail.com"` const at the top of all three view files so the email lives in one place per file.
+- Footer (src/components/layout/footer.tsx):
+  - Added 2 new icon buttons in the brand column's social row: a Briefcase icon linking to `mailto:...?subject=Business inquiry - YellowPDF` (with `aria-label="Email us for business inquiries"`) and a Bug icon linking to `mailto:...?subject=Issue report - YellowPDF` (with `aria-label="Email us to report an issue"`). Each has a `title` tooltip showing the email.
+  - Wired the existing Mail icon button to `mailto:ravi997358@gmail.com` (was previously a dead `href="#"`).
+  - Added a clickable email link below the social row ("ravi997358@gmail.com" with a small Mail icon, in muted text, hover turns brand-yellow).
+- About page (src/components/views/blog-about-views.tsx):
+  - Added a new `<Section title="Business & issues">` between "Built with" and the existing "Sponsor & donate" section.
+  - Section contains a 2-column grid of two clickable cards: "Business inquiries" (Briefcase icon, yellow tint) and "Report an issue" (Bug icon, destructive tint) — each shows the email in yellow text and links to a mailto with the appropriate `?subject=` query so the user's email client opens with a pre-filled subject.
+  - Below the cards: a small "Or use the in-app Feedback form" line with a button linking to the Feedback view for users who prefer structured submission.
+- Feedback page (src/components/views/feedback-view.tsx):
+  - Added a new section below the Donate CTA: "Prefer email? Reach us directly".
+  - Same 2-column grid of Business inquiries + Report an issue cards as the About page.
+  - Plus a final clickable email link at the bottom (`ravi997358@gmail.com` with Mail icon, hover underline).
+- Sidebar nav bug fix (src/components/layout/sidebar.tsx): while verifying, found that the "Technical Blog" and "About YellowPDF" sidebar items called `openTool("blog")` / `openTool("about")` — but `openTool` sets `view: "tool"` and the registry's `ToolView` returns null for blog/about (since those views are rendered directly by page.tsx). Net effect: clicking those sidebar items showed an empty main panel. Fixed both to call `setView("blog")` / `setView("about")` (matching their existing `active` checks). One-line change each.
+- Validation:
+  - `bun run lint` → 0 errors / 0 warnings (clean).
+  - `curl http://localhost:3000/` → 200.
+  - Agent Browser click-tests + VLM verification:
+    * Footer (full-page screenshot) → VLM confirms ravi997358@gmail.com visible with Mail icon, plus Briefcase/Business and Bug/Issues icon buttons.
+    * About page → clicked "About YellowPDF" in sidebar → page now renders correctly (previously empty due to the nav bug). VLM confirms the "Business & issues" section renders with both cards (briefcase + bug icons) and the email visible in yellow in both.
+    * Feedback page → clicked "Send Feedback" in sidebar → scrolled to the new "Prefer email? Reach us directly" section → VLM confirms heading + 2 cards + clickable email link.
+
+Stage Summary:
+- Contact email `ravi997358@gmail.com` is now visible and clickable in 3 user-facing locations: footer (icon row + text link), About page (Business & issues section with 2 cards), Feedback page (Prefer email section with 2 cards + email link).
+- All email links use `mailto:` with appropriate `?subject=` queries pre-filled for business vs. issue-report context.
+- Sidebar nav bug for blog/about routes is fixed as a bonus — About YellowPDF and Technical Blog are now reachable.
+- Lint clean, dev server returns 200, Agent Browser + VLM confirm all 3 contact surfaces render correctly.

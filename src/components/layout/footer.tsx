@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Github, Twitter, Mail } from "lucide-react";
+import { Heart, Github, Twitter, Mail, Briefcase, Bug } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { CATEGORIES } from "@/lib/tools";
+
+/** Central contact email for business inquiries and issue reports. */
+const CONTACT_EMAIL = "ravi997358@gmail.com";
 
 export function Footer() {
   const setView = useAppStore((s) => s.setView);
@@ -31,6 +34,22 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-3 mt-4">
               <a
+                href={`mailto:${CONTACT_EMAIL}?subject=Business%20inquiry%20-%20YellowPDF`}
+                className="grid place-items-center h-8 w-8 rounded-md border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                aria-label="Email us for business inquiries"
+                title={`Business: ${CONTACT_EMAIL}`}
+              >
+                <Briefcase className="h-4 w-4" />
+              </a>
+              <a
+                href={`mailto:${CONTACT_EMAIL}?subject=Issue%20report%20-%20YellowPDF`}
+                className="grid place-items-center h-8 w-8 rounded-md border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                aria-label="Email us to report an issue"
+                title={`Report an issue: ${CONTACT_EMAIL}`}
+              >
+                <Bug className="h-4 w-4" />
+              </a>
+              <a
                 href="#"
                 className="grid place-items-center h-8 w-8 rounded-md border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
                 aria-label="GitHub"
@@ -45,13 +64,21 @@ export function Footer() {
                 <Twitter className="h-4 w-4" />
               </a>
               <a
-                href="#"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="grid place-items-center h-8 w-8 rounded-md border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
                 aria-label="Email"
+                title={CONTACT_EMAIL}
               >
                 <Mail className="h-4 w-4" />
               </a>
             </div>
+            <a
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="inline-flex items-center gap-1.5 mt-3 text-xs text-muted-foreground hover:text-primary transition-colors"
+            >
+              <Mail className="h-3.5 w-3.5" />
+              {CONTACT_EMAIL}
+            </a>
           </div>
 
           {/* Top categories */}
