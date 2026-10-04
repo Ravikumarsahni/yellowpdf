@@ -3,6 +3,7 @@
 import { BookOpen, ArrowLeft, Clock, Tag, Briefcase, Bug, Mail } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
+import { UpiDonate, DONATION_UPI_ID } from "@/components/donation/upi-donate";
 
 /** Central contact email for business inquiries and issue reports. */
 const CONTACT_EMAIL = "ravi997358@gmail.com";
@@ -257,9 +258,20 @@ export function AboutView() {
           find the tool useful. We never sell data — there&apos;s no data to
           sell, since files never leave your browser.
         </p>
+        <p className="mt-2 text-sm">
+          <strong className="text-foreground">Donate via UPI:</strong>{" "}
+          <code className="font-mono font-semibold text-primary">
+            {DONATION_UPI_ID}
+          </code>{" "}
+          (India). Use the block below to pick an amount and pay with any UPI
+          app — GPay, PhonePe, Paytm, or BHIM.
+        </p>
+        <div className="mt-3 not-prose">
+          <UpiDonate defaultAmount={100} />
+        </div>
         <p className="mt-3">
           <Button onClick={() => setView("feedback")}>
-            Send feedback or donate
+            Send feedback or sponsor
           </Button>
         </p>
       </Section>

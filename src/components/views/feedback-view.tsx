@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { UpiDonate, DONATION_UPI_ID } from "@/components/donation/upi-donate";
 
 /** Central contact email for business inquiries and issue reports. */
 const CONTACT_EMAIL = "ravi997358@gmail.com";
@@ -175,10 +176,18 @@ export function FeedbackView() {
           fund hosting, the LLM API for AI tools, and the next 10 tools on our
           roadmap.
         </p>
-        <Button className="mt-3" variant="default">
-          <Heart className="h-4 w-4 mr-1.5 fill-current" />
-          Donate $5
-        </Button>
+
+        {/* UPI donation block — amount picker, QR, copy + deep link */}
+        <div className="mt-4">
+          <UpiDonate defaultAmount={100} />
+        </div>
+
+        <p className="mt-4 text-xs text-muted-foreground">
+          UPI ID:{" "}
+          <code className="font-mono font-semibold text-primary">
+            {DONATION_UPI_ID}
+          </code>
+        </p>
       </div>
 
       {/* Prefer email? Direct contact for business + issues */}

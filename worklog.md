@@ -598,3 +598,40 @@ Stage Summary:
 - All email links use `mailto:` with appropriate `?subject=` queries pre-filled for business vs. issue-report context.
 - Sidebar nav bug for blog/about routes is fixed as a bonus — About YellowPDF and Technical Blog are now reachable.
 - Lint clean, dev server returns 200, Agent Browser + VLM confirm all 3 contact surfaces render correctly.
+
+---
+Task ID: 12-upi-donate
+Agent: Main (Z.ai Code) — orchestrator
+Task: Add UPI ID 9354288574@upi for donations in the donation section (Feedback page + About page)
+
+Work Log:
+- User requested: add the UPI ID `9354288574@upi` for donations in the donation section.
+- Read the existing Donate CTA in `src/components/views/feedback-view.tsx` (lone "Donate $5" button) and the "Sponsor & donate" section in `src/components/views/blog-about-views.tsx` (just a "Send feedback or donate" button — no actual payment surface).
+- Created a new reusable component: `src/components/donation/upi-donate.tsx` exporting:
+  - `DONATION_UPI_ID = "9354288574@upi"` — single source of truth.
+  - `buildUpiLink(amount?)` — builds a UPI deep link `upi://pay?pa=...&pn=YellowPDF&cu=INR&tn=Donation%20to%20YellowPDF&am=N` per NPCI spec; opens GPay/PhonePe/Paytm/BHIM on Android & iOS with payee + amount + note pre-filled.
+  - `<UpiDonate defaultAmount={100} />` — interactive block:
+    * Amount preset buttons (₹50 / ₹100 / ₹250 / ₹500) with the active one highlighted in brand yellow. Aria-pressed state for accessibility.
+    * Custom-amount `<Input type="number">` with ₹ prefix; overrides the preset when a valid positive integer is entered (and clears back to the preset if emptied on blur).
+    * Click-to-show QR code (180×180) generated via `https://api.qrserver.com/v1/create-qr-code/?...&data={encoded upiLink}` — debounced 120ms so rapid amount changes don't thrash the network. Hidden by default (QrCode icon + "Click to show QR" placeholder) to avoid loading the external image unless the user wants it.
+    * UPI ID display in a monospace `<code>` box with a Copy button (uses `navigator.clipboard.writeText` with a `document.execCommand` fallback for older browsers / non-secure contexts). Shows a green check for 1.8s + a "UPI ID copied" toast.
+    * "Pay ₹N via UPI" yellow button (an `<a href={upiLink}>` deep link) — on mobile opens the UPI app chooser with amount pre-filled; on desktop shows the QR.
+    * Helper text: "On mobile, this opens your UPI app with the amount pre-filled. On desktop, scan the QR with your phone camera."
+    * All interactive elements have aria-labels; the QR toggle button has a dynamic aria-label based on state.
+- Wired `<UpiDonate>` into the Feedback page's Donate CTA (replaced the lone "Donate $5" button). Also added a small "UPI ID: 9354288574@upi" footer line below the block for quick reference.
+- Wired `<UpiDonate>` into the About page's "Sponsor & donate" section — added an inline sentence introducing the UPI ID, then rendered the full interactive block below. Also renamed the bottom button from "Send feedback or donate" → "Send feedback or sponsor".
+- Validation:
+  - `bun run lint` → 0 errors / 0 warnings (had to remove an unused `eslint-disable @next/next/no-img-element` directive — the rule doesn't fire for external `<img src="https://...">` URLs since Next.js only warns about local images that should use `<Image>`).
+  - `curl http://localhost:3000/` → 200.
+  - Agent Browser + VLM end-to-end verification:
+    * **Feedback page**: VLM confirms all 5 elements rendered — "Pay via UPI" heading with "(GPay · PhonePe · Paytm · BHIM)" subtext; ₹50/₹100/₹250/₹500 amount buttons with ₹100 highlighted yellow; UPI ID `9354288574@upi` in a code box with Copy icon button; "Pay ₹100 via UPI" yellow button; "Click to show QR" placeholder.
+    * **Interactivity test**: clicked ₹250 → button highlighted yellow + Pay button text updated to "Pay ₹250 via UPI". Clicked Copy → green "UPI ID copied" toast appeared (VLM even noticed it in the next screenshot). Clicked "Show QR" → black-and-white scannable QR code rendered from qrserver.com with "Scan with any UPI app" caption.
+    * **About page**: navigated to About YellowPDF → scrolled to Sponsor & donate section → VLM confirms "Sponsor & donate" heading, inline `9354288574@upi` in yellow text, and the full UpiDonate block rendered below with all controls (amount buttons, UPI ID code box, Pay button, QR placeholder).
+
+Stage Summary:
+- UPI ID `9354288574@upi` is now a first-class donation surface in 2 locations:
+  * **Feedback page** Donate CTA — full UpiDonate block + inline UPI ID footer line.
+  * **About page** Sponsor & donate section — inline UPI ID mention + full UpiDonate block.
+- Donors can pick a preset amount (₹50/100/250/500) or enter custom, copy the UPI ID with one click, scan a QR code from their phone, or tap "Pay via UPI" on mobile to open GPay/PhonePe/Paytm/BHIM with the payee + amount + note pre-filled.
+- Reusable `UpiDonate` component lives at `src/components/donation/upi-donate.tsx` — easy to embed in future surfaces (e.g. dashboard sponsored panel) without duplicating logic.
+- Lint clean, dev server returns 200, Agent Browser + VLM confirm both surfaces render and all 3 interactions (amount select / copy / QR toggle) work end-to-end.
