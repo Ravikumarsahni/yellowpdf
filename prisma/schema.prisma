@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// YellowPDF — client-side PDF tools platform.
+// All PDF processing happens in the browser; this DB only stores
+// lightweight analytics, feedback, and blog content (markdown).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Anonymous usage stats — powers the "100k users" scalability story.
+model UsageEvent {
+  id            String   @id @default(cuid())
+  toolId        String
+  sessionId     String?
+  success       Boolean  @default(true)
+  fileSizeBytes Int?
+  durationMs    Int?
+  createdAt     DateTime @default(now())
+}
+
+/// User feedback / feature requests / bug reports / praise.
+model Feedback {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String?
+  category  String   @default("general") // general | bug | feature | praise
+  message   String
+  rating    Int      @default(5) // 1-5
+  createdAt DateTime @default(now())
+}
+
+/// Technical blog articles stored as markdown.
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String
+  content     String // markdown body
+  tags        String // comma-separated tags
+  author      String   @default("YellowPDF Team")
+  published   Boolean  @default(true)
+  viewCount   Int      @default(0)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Per-tool aggregate counters — incremented server-side for the
+/// dashboard "trending tools" feature.
+model ToolMetric {
+  id         String   @id @default(cuid())
+  toolId     String   @unique
+  totalCount Int      @default(0)
+  weekCount  Int      @default(0)
+  lastUsedAt DateTime?
+  updatedAt  DateTime @updatedAt
+}
